@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  server:
+    build: .
+    volumes:
+      - ./server:/server
+    working_dir: /server
+    command: cargo
+    tty: true
