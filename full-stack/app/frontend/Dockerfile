@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/frontend
 
 # NOTE: こいつらは必要、ないとコンテナがすぐ落ちてしまう
 COPY package*.json ./
