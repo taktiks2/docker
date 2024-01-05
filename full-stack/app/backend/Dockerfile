@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r /requirements.txt
 
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "--settings=config.settings.development"]
+CMD ["python", "manage.py", "runserver", "0:8000", "--settings=config.settings.development"]

@@ -1,6 +1,7 @@
 services:
   app-db:
     image: mysql:8
+    container_name: app-db
     command:
       --collation-server=utf8mb4_0900_bin
       --transaction-isolation=READ-COMMITTED
@@ -15,9 +16,18 @@ services:
       TZ: Asita/Tokyo
     ports:
       - 53306:3306
+    networks:
+      - external
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
   nextjs:
     container_name: nextjs-app
-    build: ./frontend
+    build:
+      context: ./frontend
     ports:
       - "3000:3000"
     volumes:
@@ -25,16 +35,23 @@ services:
       - /usr/src/frontend/node_modules
     environment:
       - NODE_ENV=development
+    networks:
+      - external
   django:
     container_name: django-app
     depends_on:
-      - app-db
-    build: ./backend
+      app-db:
+        condition: service_healthy
+    build:
+      context: ./backend
     ports:
       - "8000:8000"
     volumes:
       - ./backend/:/usr/src/backend
     environment:
       - DJANGO_ENV=development
-    extra_hosts:
-    - host.docker.internal:host-gateway
+    networks:
+      - external
+
+networks:
+  external:
