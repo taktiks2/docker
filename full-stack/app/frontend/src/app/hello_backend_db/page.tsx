@@ -3,16 +3,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-type Data = {
-  message: string;
-};
-
 function Page() {
-  const [data, setData] = useState<Data>({ message: "" });
+  const [data, setData] = useState({ message: "" });
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/hello/backend");
+      const res = await axios.get("/api/hello_db/backend");
       setData(res.data);
     })();
   }, []);
